@@ -1,6 +1,6 @@
 <h1>ExpNo 4 : Implement A* search algorithm for a Graph</h1> 
-<h3>Name:       </h3>
-<h3>Register Number:           </h3>
+<h3>Name:  RAHUL S    </h3>
+<h3>Register Number:  212224040259         </h3>
 <H3>Aim:</H3>
 <p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
 <H3>Algorithm:</H3>
@@ -47,6 +47,110 @@
   
     e) push q on the closed list
     end (while loop)
+
+``````
+
+<H3>Program:</H3>
+
+``````
+from collections import defaultdict
+
+# Heuristic distances
+H_dist = {}
+
+def aStarAlgo(start_node, stop_node):
+    open_set = set(start_node)
+    closed_set = set()
+    g = {}               # store distance from starting node
+    parents = {}         # parents contains an adjacency map of all nodes
+
+    g[start_node] = 0
+    parents[start_node] = start_node
+
+    while len(open_set) > 0:
+        n = None
+        # node with lowest f() is found
+        for v in open_set:
+            if n is None or g[v] + heuristic(v) < g[n] + heuristic(n):
+                n = v
+
+        if n == stop_node or Graph_nodes[n] == None:
+            pass
+        else:
+            for (m, weight) in get_neighbors(n):
+                if m not in open_set and m not in closed_set:
+                    open_set.add(m)
+                    parents[m] = n
+                    g[m] = g[n] + weight
+                else:
+                    if g[m] > g[n] + weight:
+                        g[m] = g[n] + weight
+                        parents[m] = n
+                        if m in closed_set:
+                            closed_set.remove(m)
+                            open_set.add(m)
+
+        if n is None:
+            print('Path does not exist!')
+            return None
+
+        if n == stop_node:
+            path = []
+            while parents[n] != n:
+                path.append(n)
+                n = parents[n]
+            path.append(start_node)
+            path.reverse()
+            print('Path found: {}'.format(path))
+            return path
+
+        open_set.remove(n)
+        closed_set.add(n)
+
+    print('Path does not exist!')
+    return None
+
+# function to get neighbors and their costs
+def get_neighbors(v):
+    """
+    Returns the neighbors of node v from the graph.
+    """
+    return Graph_nodes.get(v, [])
+
+# function to get heuristic value of a node
+def heuristic(n):
+    return H_dist[n]
+
+# Input Section
+graph = defaultdict(list)
+
+# First, take number of nodes and edges
+n, e = map(int, input("Enter number of nodes and edges: ").split())
+
+# Then take all edges with costs
+print("Enter edges in the format: node1 node2 cost")
+for i in range(e):
+    u, v, cost = input().split()
+    t = (v, float(cost))
+    graph[u].append(t)
+    t1 = (u, float(cost))
+    graph[v].append(t1)
+
+# Then take heuristic values
+print("Enter heuristic values for each node: node heuristic_value")
+for i in range(n):
+    node, h = input().split()
+    H_dist[node] = float(h)
+
+# Display the graph and heuristic for clarity
+print("Heuristic Values:", H_dist)
+print("Graph Structure:", dict(graph))
+
+# Assign graph to Graph_nodes
+Graph_nodes = graph
+
+# Now run A* from A to J (not S to G)
+aStarAlgo('A', 'J')
 
 ``````
 
